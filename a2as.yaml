@@ -1,0 +1,325 @@
+manifest:
+  version: "0.1.3"
+  schema: https://a2as.org/cert/schema
+  subject:
+    name: ksachdeva/repo-stargazer
+    source: https://github.com/ksachdeva/repo-stargazer
+    branch: main
+    commit: "af1e075a"
+    scope: [src/repo_stargazer/__about__.py, src/repo_stargazer/__main__.py, src/repo_stargazer/_locations.py, src/repo_stargazer/agent/__init__.py,
+      src/repo_stargazer/agent/_agent.py, src/repo_stargazer/agent/_config.py, src/repo_stargazer/agent/_prompts.py, src/repo_stargazer/mcp_support/_server.py]
+  issued:
+    by: A2AS.org
+    at: '2026-02-11T16:41:27Z'
+    url: https://a2as.org/certified/agents/ksachdeva/repo-stargazer
+  signatures:
+    digest: sha256:5qzUbqggwi_fYlQJVRS9Fkx234OqShkGCvy6GHl-Irg
+    key: ed25519:sP1XRGDP36WEFthFtAGaRNDxffiswWPW0exbwSbRbAM
+    sig: ed25519:9Y_IvfOIV-1EBhDU3_FSo_iD1J4w3m91MwzSIE6XqCa5EL-gRScZstKuIxqjnYTsVX-0eeycrZwxxqWeLCx-DQ
+
+agents:
+  agent.create_agent:
+    type: factory
+    models: [_make_litellm]
+    tools: [tools]
+    params:
+      name: rsg
+      description: description
+      instruction: system_prompt
+      function: create_agent
+
+models:
+  _make_litellm:
+    type: function
+    agents: [agent.create_agent]
+    params:
+      wrapper: _make_litellm
+      arg_0: model_config.litellm_params
+
+tools:
+  tools:
+    type: function
+    agents: [agent.create_agent]
+    params:
+      dynamic: "True"
+
+imports:
+  __application__: __about__.__application__
+  __author__: __about__.__author__
+  __version__: __about__.__version__
+  AgentConfig: _config.AgentConfig
+  Any: typing.Any
+  asyncio: asyncio
+  AzureOpenAIEmbeddings: langchain_openai.AzureOpenAIEmbeddings
+  BaseModel: pydantic.BaseModel
+  BaseRetriever: langchain_core.retrievers.BaseRetriever
+  cache_directory: _locations.cache_directory
+  CacheBackedEmbeddings: langchain.embeddings.cache.CacheBackedEmbeddings
+  create_adk_agent: agent.create_agent
+  create_agent: _agent.create_agent
+  data_directory: _locations.data_directory
+  DEFAULT_DESCRIPTION: _prompts.DEFAULT_DESCRIPTION
+  EmbedderSettings: _config.EmbedderSettings
+  EmbeddingModelType: _types.EmbeddingModelType
+  Embeddings: langchain_core.embeddings.Embeddings
+  enable_arize_otel_if_needed: repo_stargazer._otel.enable_arize_otel_if_needed
+  FastMCP: mcp.server.fastmcp.FastMCP
+  Field: pydantic.Field
+  get_fast_api_app: google.adk.cli.fast_api.get_fast_api_app
+  Github: github.Github
+  GitHubRepoInfo: _types.GitHubRepoInfo
+  LanceDBVectorStore: langchain_community.vectorstores.LanceDB
+  LiteLlm: google.adk.models.lite_llm.LiteLlm
+  LiteLLMConfig: _config.LiteLLMConfig
+  LlmAgent: google.adk.agents.llm_agent.LlmAgent
+  logging: logging
+  make_embedding_instance: _embedder.make_embedding_instance
+  make_mcp_server: repo_stargazer.mcp_support._server.make_mcp_server
+  OllamaEmbeddings: langchain_ollama.OllamaEmbeddings
+  OpenAIEmbeddings: langchain_openai.OpenAIEmbeddings
+  os: os
+  PaginatedList: github.PaginatedList.PaginatedList
+  Path: pathlib.Path
+  pd: pandas
+  readme_data_directory: _locations.readme_data_directory
+  Repository: github.Repository.Repository
+  RetrievalResult: _types.RetrievalResult
+  RSG: repo_stargazer._app.RSG
+  run_embedder: _embedder.run_embedder
+  Settings: _config.Settings
+  SETTINGS: _config.SETTINGS
+  SQLStore: langchain_community.storage.SQLStore
+  SYSTEM_PROMPT: _prompts.SYSTEM_PROMPT
+  TextSplitter: langchain_text_splitters.TextSplitter
+  TokenTextSplitter: langchain_text_splitters.TokenTextSplitter
+  ToolUnion: google.adk.agents.llm_agent.ToolUnion
+  track: rich.progress.track
+  Typer: typer.Typer
+  typer: typer
+  uvicorn: uvicorn
+  vector_store_dir: _locations.vector_store_dir
+  VectorStore: langchain_core.vectorstores.VectorStore
+  WorkerPool: mpire.pool.WorkerPool
+  xdg_cache_home: xdg_base_dirs.xdg_cache_home
+  xdg_data_home: xdg_base_dirs.xdg_data_home
+
+functions:
+  __init__:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [self, settings]
+    params:
+      returns: None
+  _fetch_and_write_readme:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [name, row]
+    params:
+      returns: None
+  _get_cache_home:
+    type: sync
+    module: src.repo_stargazer._locations
+    params:
+      returns: Path
+  _get_data_home:
+    type: sync
+    module: src.repo_stargazer._locations
+    params:
+      returns: Path
+  _make_litellm:
+    type: sync
+    module: src.repo_stargazer.agent._agent
+    args: [params]
+    params:
+      returns: LiteLlm
+  _make_rsg:
+    type: sync
+    module: src.repo_stargazer.__main__
+    args: [config]
+    params:
+      returns: RSG
+  _process_read_me:
+    type: sync
+    module: src.repo_stargazer._embedder
+    args: [name, row]
+    params:
+      returns: tuple
+  _refetch_starred_repositories:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [total_stars, starred_repos]
+    params:
+      returns: list[Repository]
+  _repos_to_df:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [repos]
+    params:
+      returns: pd.DataFrame
+  _rsg_directory:
+    type: sync
+    module: src.repo_stargazer._locations
+    args: [root]
+    params:
+      returns: Path
+  build:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [self]
+    params:
+      returns: None
+  cache_directory:
+    type: sync
+    module: src.repo_stargazer._locations
+    params:
+      returns: Path
+  create_agent:
+    type: sync
+    module: src.repo_stargazer.agent._agent
+    args: [model_config, tools, description, system_prompt]
+    params:
+      returns: LlmAgent
+  data_directory:
+    type: sync
+    module: src.repo_stargazer._locations
+    params:
+      returns: Path
+  find_starred_repos:
+    type: tool
+    module: src.repo_stargazer.mcp_support._server
+    args: [query]
+    params:
+      returns: list[str]
+  get_readme:
+    type: sync
+    module: src.repo_stargazer.mcp_support._server
+    args: [repo_name]
+    params:
+      returns: str
+  get_retriever:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [self, search_kwargs]
+    params:
+      returns: BaseRetriever
+  get_settings:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [self]
+    params:
+      returns: Settings
+  make_adk_agent:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [self]
+    params:
+      returns: LlmAgent
+  make_embedding_instance:
+    type: sync
+    module: src.repo_stargazer._embedder
+    args: [embedder_settings]
+    params:
+      returns: Embeddings
+  make_mcp_server:
+    type: sync
+    module: src.repo_stargazer.mcp_support._server
+    args: [rsg]
+    params:
+      returns: FastMCP
+  readme_data_directory:
+    type: sync
+    module: src.repo_stargazer._locations
+    params:
+      returns: Path
+  repo_to_dict:
+    type: sync
+    module: src.repo_stargazer._app
+    args: [repo]
+    params:
+      returns: GitHubRepoInfo
+  retrieve:
+    type: sync
+    module: src.repo_stargazer.__main__
+    args: [query, config]
+    params:
+      returns: None
+  retrieve_starred_repositories:
+    type: async
+    module: src.repo_stargazer._app
+    args: [self, query, top_k]
+    params:
+      returns: list[RetrievalResult]
+  run_adk_server:
+    type: sync
+    module: src.repo_stargazer.__main__
+    args: [host, port, config]
+    params:
+      returns: None
+  run_embedder:
+    type: sync
+    module: src.repo_stargazer._embedder
+    args: [text_splitter, vector_store]
+    params:
+      returns: None
+  run_mcp_server:
+    type: sync
+    module: src.repo_stargazer.__main__
+    args: [config]
+    params:
+      returns: None
+  vector_store_dir:
+    type: sync
+    module: src.repo_stargazer._locations
+    params:
+      returns: Path
+
+variables:
+  RSG_CONFIG_FILE:
+    type: env
+    params:
+      caller: [os.environ]
+  RSG_DATA_HOME:
+    type: env
+    params:
+      caller: [os.getenv]
+      path: [src.repo_stargazer._locations]
+
+files:
+  -repos.starred.parquet:
+    type: literal
+    actions: [read]
+    params:
+      caller: [get_readme, build]
+      path: [data_directory]
+  ./:
+    type: pattern
+    actions: [read]
+    params:
+      patterns: ['*.starred.parquet']
+      caller: [run_embedder]
+  .md:
+    type: literal
+    actions: [read]
+    params:
+      caller: [get_readme, _fetch_and_write_readme, _process_read_me]
+      path: [readme_data_directory]
+  embedding.db:
+    type: literal
+    actions: [read]
+    params:
+      caller: [cache_directory.joinpath]
+  readme_file_path:
+    type: variable
+    actions: [read, write]
+    params:
+      caller: [readme_file_path.read_text, readme_file_path.write_bytes, Path]
+  readmes_dir:
+    type: variable
+    actions: [write]
+    params:
+      caller: [readmes_dir.mkdir]
+  vector_store_dir:
+    type: variable
+    actions: [write]
+    params:
+      caller: [vector_store_dir.mkdir]
